@@ -19,6 +19,7 @@ class LayerCell: UICollectionViewCell {
     
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var layerLabel: UILabel!
+    @IBOutlet weak var bg: UIImageView!
     
     
     

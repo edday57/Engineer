@@ -10,17 +10,29 @@ import UIKit
 
 class SelectorVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    @IBOutlet weak var headerView: UIView!
     var selectedPath: Int?
     var selectedElement: UIImage?
-    var elements = [#imageLiteral(resourceName: "1Circle.png"), #imageLiteral(resourceName: "2Square.png"), #imageLiteral(resourceName: "3Rectangle.png"), #imageLiteral(resourceName: "4Triangle.png")]
+    var elements = [#imageLiteral(resourceName: "1Circle.png"), #imageLiteral(resourceName: "2Square.png"), #imageLiteral(resourceName: "3Rectangle.png"), #imageLiteral(resourceName: "4Triangle.png"), #imageLiteral(resourceName: "5Pentagon.png"), #imageLiteral(resourceName: "6Semicircle.png"), #imageLiteral(resourceName: "7Arc.png"), #imageLiteral(resourceName: "8RoundedRect.png"), #imageLiteral(resourceName: "9Pointer.png"), #imageLiteral(resourceName: "10Shape1.png"), #imageLiteral(resourceName: "11CutOval.png"), #imageLiteral(resourceName: "12CutCircle.png"), #imageLiteral(resourceName: "13Star.png"), #imageLiteral(resourceName: "14HalfStar.png"), #imageLiteral(resourceName: "15Trapesium.png")]
 
+    
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let segAttributes: NSDictionary = [
+            NSForegroundColorAttributeName: UIColor.white
+        ]
+        
+        segmentedControl.setTitleTextAttributes(segAttributes as [NSObject : AnyObject], for: UIControlState.selected)
         collectionView.reloadData()
         // Do any additional setup after loading the view.
+        
+        headerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        headerView.layer.shadowColor = UIColor.black.cgColor
+        headerView.layer.shadowOpacity = 1.0
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,6 +51,7 @@ class SelectorVC: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SelectorCell
         cell.image.image = elements[indexPath.row]
+        
         return cell
     }
 

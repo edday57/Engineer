@@ -11,6 +11,8 @@ import UIKit
 class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var layersLabel: UILabel!
     @IBOutlet weak var canvasView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -18,17 +20,25 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectio
     var layers = [UIImageView]()
     var currentActive: Int?
     
-
+    
+    
     @IBOutlet var container: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let lightBlack = UIColor(colorLiteralRed: 0.05, green: 0.05, blue: 0.05, alpha: 1)
-        collectionView.backgroundColor = lightBlack
+        
         
         canvasView.clipsToBounds = true
         
+        headerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        headerView.layer.shadowColor = UIColor.black.cgColor
+        headerView.layer.shadowOpacity = 1.0
+        
+        
+        collectionView.layer.shadowColor = UIColor.black.cgColor
+        collectionView.layer.shadowOpacity = 1.0
+        collectionView.layer.shadowRadius = 2
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,9 +56,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectio
         cell.image.image = layers[indexPath.row].image
         cell.layerLabel.text = "Layer \((String(indexPath.row + 1)))"
         if indexPath.row == currentActive {
-            cell.backgroundColor = UIColor.darkGray
+            cell.bg.image = UIImage(named: "CellBGLightx1.png")
         } else {
-            cell.backgroundColor = UIColor.gray
+            cell.bg.image = UIImage(named: "CellBGx1.png")
         }
         return cell
     }
@@ -69,7 +79,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectio
         element.addGestureRecognizer(pinchrecogniser)
         element.isUserInteractionEnabled = true
  */
-        
+     
         self.canvasView.addSubview(element)
         self.layers.append(element)
         makeActive(index: layers.count - 1)
@@ -147,6 +157,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectio
         let panrecogniser = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         let rotationrecogniser = UIRotationGestureRecognizer(target: self, action: #selector(self.handleRotate))
         let pinchrecogniser = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
+        pinchrecogniser.delegate = self
+        rotationrecogniser.delegate = self
         layers[index].addGestureRecognizer(rotationrecogniser)
         layers[index].addGestureRecognizer(panrecogniser)
         layers[index].addGestureRecognizer(pinchrecogniser)
@@ -154,6 +166,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectio
         
         currentActive = index
         collectionView.reloadData()
+        layersLabelUpdate()
     }
     
     @IBAction func unwindToEditor(sender: UIStoryboardSegue) {
@@ -164,5 +177,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UICollectio
         }
     }
     
+    func layersLabelUpdate() {
+        layersLabel.text = "Layers: \(layers.count) / 64"
+    }
+    @IBAction func backBtnPressed(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
